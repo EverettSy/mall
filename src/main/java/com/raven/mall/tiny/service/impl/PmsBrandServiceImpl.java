@@ -22,10 +22,10 @@ import java.util.List;
 
 /**
  * <<PmsBrandService实现类>>
- * @description: PmsBrandService实现类
+ *
  * @author Raven
+ * @description: PmsBrandService实现类
  * @date 2019/5/17 17:28
- * @version
  */
 @Service
 public class PmsBrandServiceImpl implements PmsBrandService {
@@ -56,7 +56,7 @@ public class PmsBrandServiceImpl implements PmsBrandService {
 
     @Override
     public List<PmsBrand> listBrand(int pageNum, int pageSize) {
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         brandMapper.selectByExample(new PmsBrandExample());
         return brandMapper.selectByExample(new PmsBrandExample());
     }

@@ -22,10 +22,10 @@ import java.util.List;
 
 /**
  * <<用于生产MBG的代码>>
- * @description:
+ *
  * @author Raven
+ * @description:
  * @date 2019/5/15 15:11
- * @version
  */
 public class Generator {
 
@@ -34,16 +34,17 @@ public class Generator {
         List<String> warnings = new ArrayList<>();
         //当生成的代码重复时，覆盖原代码
         boolean overwrite = true;
-        //读取我们的MBG 配置
+        //读取我们的 MBG 配置文件
         @Cleanup InputStream is = Generator.class.getResourceAsStream("/generatorConfig.xml");
         ConfigurationParser cp = new ConfigurationParser(warnings);
         Configuration config = cp.parseConfiguration(is);
 
         DefaultShellCallback callback = new DefaultShellCallback(overwrite);
-        //创建MBG
-        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config,callback,warnings);
+        //创建 MBG
+        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(config, callback, warnings);
+        //执行生成代码
         myBatisGenerator.generate(null);
-        //输入警告信息
+        //输出警告信息
         for (String warning : warnings) {
             System.out.println(warning);
         }

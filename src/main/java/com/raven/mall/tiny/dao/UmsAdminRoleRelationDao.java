@@ -8,7 +8,7 @@
  * <author>          <time>          <version>          <desc>
  * 作者姓名           修改时间           版本号              描述
  */
-package com.raven.mall.tiny;
+package com.raven.mall.tiny.dao;
 
 import com.raven.mall.tiny.mbg.model.UmsPermission;
 import org.apache.ibatis.annotations.Param;
@@ -27,6 +27,7 @@ public interface UmsAdminRoleRelationDao {
 
     /**
      * 获取用户所有权限(包括+-权限)
+     *
      * @param adminId 管理员id
      * @return 用户所有权限
      */

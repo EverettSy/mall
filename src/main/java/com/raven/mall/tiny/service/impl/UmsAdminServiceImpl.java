@@ -10,8 +10,8 @@
  */
 package com.raven.mall.tiny.service.impl;
 
-import com.raven.mall.tiny.UmsAdminRoleRelationDao;
 import com.raven.mall.tiny.common.utils.JwtTokenUtil;
+import com.raven.mall.tiny.dao.UmsAdminRoleRelationDao;
 import com.raven.mall.tiny.mbg.mapper.UmsAdminMapper;
 import com.raven.mall.tiny.mbg.model.UmsAdmin;
 import com.raven.mall.tiny.mbg.model.UmsAdminExample;
@@ -55,14 +55,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Value("${jwt.tokenHead}")
-    private String tokenHead;
-
     @Autowired
     private UmsAdminMapper adminMapper;
 
     @Autowired
     private UmsAdminRoleRelationDao adminRoleRelationDao;
+
+    @Value("${jwt.tokenHead}")
+    private String tokenHead;
 
     /**
      * 根据用户名获取后台管理员
@@ -118,14 +118,14 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         String token = null;
         try {
             UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-            if (!passwordEncoder.matches(password,userDetails.getUsername())){
+            if (!passwordEncoder.matches(password, userDetails.getPassword())) {
                 throw new BadCredentialsException("密码不正确");
             }
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(userDetails,null,userDetails.getAuthorities());
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
+            SecurityContextHolder.getContext().setAuthentication(authentication);
             token = jwtTokenUtil.generateToken(userDetails);
         } catch (AuthenticationException e) {
-            LOGGER.warn("登录异常：{},",e.getMessage());
+            LOGGER.warn("登录异常:{}", e.getMessage());
         }
         return token;
     }

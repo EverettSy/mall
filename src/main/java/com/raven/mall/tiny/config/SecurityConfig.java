@@ -10,31 +10,31 @@
  */
 package com.raven.mall.tiny.config;
 
-import com.raven.mall.tiny.component.JwtAuthenticationTokenFilter;
-import com.raven.mall.tiny.component.RestAuthenticationEntryPoint;
-import com.raven.mall.tiny.component.RestfulAccessDeniedHandler;
-import com.raven.mall.tiny.dto.AdminUserDetails;
-import com.raven.mall.tiny.mbg.model.UmsAdmin;
-import com.raven.mall.tiny.mbg.model.UmsPermission;
-import com.raven.mall.tiny.service.UmsAdminService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+        import com.raven.mall.tiny.component.JwtAuthenticationTokenFilter;
+        import com.raven.mall.tiny.component.RestAuthenticationEntryPoint;
+        import com.raven.mall.tiny.component.RestfulAccessDeniedHandler;
+        import com.raven.mall.tiny.dto.AdminUserDetails;
+        import com.raven.mall.tiny.mbg.model.UmsAdmin;
+        import com.raven.mall.tiny.mbg.model.UmsPermission;
+        import com.raven.mall.tiny.service.UmsAdminService;
+        import org.springframework.beans.factory.annotation.Autowired;
+        import org.springframework.context.annotation.Bean;
+        import org.springframework.context.annotation.Configuration;
+        import org.springframework.http.HttpMethod;
+        import org.springframework.security.authentication.AuthenticationManager;
+        import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+        import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+        import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+        import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+        import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+        import org.springframework.security.config.http.SessionCreationPolicy;
+        import org.springframework.security.core.userdetails.UserDetailsService;
+        import org.springframework.security.core.userdetails.UsernameNotFoundException;
+        import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+        import org.springframework.security.crypto.password.PasswordEncoder;
+        import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import java.util.List;
+        import java.util.List;
 
 /**
  * <<SpringSecurity的配置>>
@@ -109,12 +109,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     @Override
-    public UserDetailsService userDetailsService(){
+    public UserDetailsService userDetailsService() {
         return username -> {
             UmsAdmin admin = adminService.getAdminByUsername(username);
-            if (admin != null){
+            if (admin != null) {
                 List<UmsPermission> permissionList = adminService.getPermissionList(admin.getId());
-                return new AdminUserDetails(admin,permissionList);
+                return new AdminUserDetails(admin, permissionList);
             }
             throw new UsernameNotFoundException("用户名和密码错误");
         };
@@ -125,7 +125,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         return new JwtAuthenticationTokenFilter();
     }
 
-
+    @Bean
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();

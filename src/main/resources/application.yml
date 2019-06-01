@@ -24,13 +24,16 @@ spring:
         enabled: true
       cluster-nodes: 127.0.0.1:9300 # es的连接地址及端口号
       cluster-name: elasticsearch # es集群的名称
+    mongodb:
+      host: localhost   #mongodb连接地址
+      port: 27017       # mongodb的连接端口号
+      database: mall-port # mongodb的连接的数据库
 
-# 关掉healthCheck
+# 关掉 elasticsearch health
 management:
-  security:
     health:
       elasticsearch:
-        enabled: false
+        enabled: true
 
 mybatis:
   mapper-locations:
@@ -50,5 +53,5 @@ jwt:
   tokenHeader: Authorization #JWT存储的请求头
   secret: mySecret #JWT加解密使用的密钥
   expiration: 604800 #JWT的超期限时间(60*60*24)
-  tokenHead: Bearer  #JWT负载中拿到开头
+  tokenHead: Bear #JWT负载中拿到开头
 

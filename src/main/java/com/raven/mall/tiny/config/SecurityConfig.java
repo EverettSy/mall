@@ -10,31 +10,31 @@
  */
 package com.raven.mall.tiny.config;
 
-        import com.raven.mall.tiny.component.JwtAuthenticationTokenFilter;
-        import com.raven.mall.tiny.component.RestAuthenticationEntryPoint;
-        import com.raven.mall.tiny.component.RestfulAccessDeniedHandler;
-        import com.raven.mall.tiny.dto.AdminUserDetails;
-        import com.raven.mall.tiny.mbg.model.UmsAdmin;
-        import com.raven.mall.tiny.mbg.model.UmsPermission;
-        import com.raven.mall.tiny.service.UmsAdminService;
-        import org.springframework.beans.factory.annotation.Autowired;
-        import org.springframework.context.annotation.Bean;
-        import org.springframework.context.annotation.Configuration;
-        import org.springframework.http.HttpMethod;
-        import org.springframework.security.authentication.AuthenticationManager;
-        import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-        import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-        import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-        import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-        import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-        import org.springframework.security.config.http.SessionCreationPolicy;
-        import org.springframework.security.core.userdetails.UserDetailsService;
-        import org.springframework.security.core.userdetails.UsernameNotFoundException;
-        import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-        import org.springframework.security.crypto.password.PasswordEncoder;
-        import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import com.raven.mall.tiny.component.JwtAuthenticationTokenFilter;
+import com.raven.mall.tiny.component.RestAuthenticationEntryPoint;
+import com.raven.mall.tiny.component.RestfulAccessDeniedHandler;
+import com.raven.mall.tiny.dto.AdminUserDetails;
+import com.raven.mall.tiny.mbg.model.UmsAdmin;
+import com.raven.mall.tiny.mbg.model.UmsPermission;
+import com.raven.mall.tiny.service.UmsAdminService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-        import java.util.List;
+import java.util.List;
 
 /**
  * <<SpringSecurity的配置>>
@@ -79,6 +79,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 )
                 .permitAll()
                 .antMatchers("/admin/login", "/admin/register") // 对登录注册要允许匿名访问
+                .permitAll()
+                .mvcMatchers("/esProduct/**", "/member/readHistory/**") //搜索及会员浏览记录暂时允许匿名访问
                 .permitAll()
                 .antMatchers(HttpMethod.OPTIONS) //跨域请求会先进行一次options请求
                 .permitAll()

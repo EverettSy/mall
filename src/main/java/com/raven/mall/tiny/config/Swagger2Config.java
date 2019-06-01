@@ -33,7 +33,7 @@ import java.util.List;
  */
 @Configuration
 @EnableSwagger2
-public class Swagger2Config {
+public class Swagger2Config{
 
     @Bean
     public Docket createRestApi() {
@@ -71,19 +71,19 @@ public class Swagger2Config {
         return result;
     }
 
+
+    private SecurityContext getContextByPath() {
+        return SecurityContext.builder()
+                .securityReferences(defaultAuth())
+                .forPaths(PathSelectors.regex("/brand/.*"))
+                .build();
+    }
+
     private List<SecurityContext> securityContexts() {
         //设置需要登录认证的路径
         List<SecurityContext> result = new ArrayList<>();
-        result.add(getContextByPath("/brand/.*"));
+        result.add(getContextByPath());
         return result;
-    }
-
-    private SecurityContext getContextByPath(String pathRegex) {
-        return SecurityContext.builder()
-                .securityReferences(defaultAuth())
-                .forPaths(PathSelectors.regex(pathRegex))
-                .build();
-
     }
 
     private List<SecurityReference> defaultAuth() {

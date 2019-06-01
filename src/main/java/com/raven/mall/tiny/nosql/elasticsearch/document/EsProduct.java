@@ -27,6 +27,12 @@ import java.util.List;
  * 不需要中文分词的字段设置成@Field(type = FieldType.Keyword)类型，
  * 需要中文分词的设置成@Field(analyzer = "ikmaxword",type = FieldType.Text)类型。
  *
+ * 常用注解
+ *  @Document   标示映射到Elasticsearch文档上的领域对象
+ *  @Id        表示是文档的id，文档可以认为是mysql中表行的概念
+ *  @Field    文档中字段的类型
+ *  FieldType ---> 为文档自动指定元数据类型
+ *
  * @author Raven
  * @date 2019/5/29 17:03
  * @version 1.0

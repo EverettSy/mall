@@ -56,7 +56,7 @@ public class Swagger2Config{
     private ApiInfo apiInfo() {
         Contact contact = new Contact("Raven", "https://syraven.top/", " private Contact contact;");
         return new ApiInfoBuilder()
-                .title("mall平台")
+                .title("mall平台接口文档")
                 .description("mall-tiny")
                 .contact(contact)
                 .version("1.0")

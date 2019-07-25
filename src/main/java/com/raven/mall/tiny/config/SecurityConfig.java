@@ -18,6 +18,7 @@ import com.raven.mall.tiny.mbg.model.UmsAdmin;
 import com.raven.mall.tiny.mbg.model.UmsPermission;
 import com.raven.mall.tiny.service.UmsAdminService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;
@@ -33,6 +34,9 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.cors.CorsConfiguration;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
+import org.springframework.web.filter.CorsFilter;
 
 import java.util.List;
 
@@ -80,12 +84,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .permitAll()
                 .antMatchers("/admin/login", "/admin/register") // 对登录注册要允许匿名访问
                 .permitAll()
-                .mvcMatchers("/esProduct/**", "/member/readHistory/**","/order/**") //搜索及会员浏览记录暂时允许匿名访问
-                .permitAll()
+                //.mvcMatchers("/esProduct/**", "/member/readHistory/**","/order/**","/aliyun/oss/**") //搜索及会员浏览记录暂时允许匿名访问
+                //.permitAll()
                 .antMatchers(HttpMethod.OPTIONS) //跨域请求会先进行一次options请求
                 .permitAll()
-                /*.antMatchers("/**")//测试时全部运行访问
-                .permitAll()*/
+                .antMatchers("/**")//测试时全部运行访问
+                .permitAll()
                 .anyRequest()// 除上面外的所有请求全部需要鉴权认证
                 .authenticated();
         //禁用缓存
@@ -131,5 +135,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
+    }
+
+    /**
+     * 允许跨域调用的过滤器
+     */
+    @Bean
+    public CorsFilter corsFilter(){
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+        CorsConfiguration config = new CorsConfiguration();
+        config.addAllowedOrigin("*");
+        config.setAllowCredentials(true);
+        config.addAllowedHeader("*");
+        config.addAllowedMethod("*");
+        source.registerCorsConfiguration("/**",config);
+        FilterRegistrationBean bean = new FilterRegistrationBean(new CorsFilter(source));
+        bean.setOrder(0);
+        return new CorsFilter(source);
     }
 }

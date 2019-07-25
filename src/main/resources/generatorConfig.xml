@@ -37,32 +37,32 @@
         <javaClientGenerator type="XMLMAPPER" targetPackage="com.raven.mall.tiny.mbg.mapper"
                              targetProject="src/main/java"/>
         <!--生成全部表tableName设为%-->
-        <table tableName="pms_brand">
+        <table tableName="%">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--后台用户表-->
+        <!--&lt;!&ndash;后台用户表&ndash;&gt;
         <table tableName="ums_admin">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--后台用户角色表-->
+        &lt;!&ndash;后台用户角色表&ndash;&gt;
         <table tableName="ums_role">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--后台用户权限表-->
+        &lt;!&ndash;后台用户权限表&ndash;&gt;
         <table tableName="ums_permission">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--后台用户和角色关系表-->
+        &lt;!&ndash;后台用户和角色关系表&ndash;&gt;
         <table tableName="ums_admin_role_relation">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--后台用户角色和权限关系表-->
+        &lt;!&ndash;后台用户角色和权限关系表&ndash;&gt;
         <table tableName="ums_role_permission_relation">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
         </table>
-        <!--后台用户和权限关系表-->
+        &lt;!&ndash;后台用户和权限关系表&ndash;&gt;
         <table tableName="ums_admin_permission_relation">
             <generatedKey column="id" sqlStatement="MySql" identity="true"/>
-        </table>
+        </table>-->
     </context>
 </generatorConfiguration>

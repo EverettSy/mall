@@ -67,8 +67,8 @@ jwt:
 aliyun:
   oss:
     endpoint: oss-cn-hangzhou.aliyuncs.com   #oss对外服务的访问域名
-    accessKeyId: LTAIcibfbNkIQ1Sz   #访问身份验证中用到用户标识
-    accessKeySecret: J4R4QTKbY5V9OJD96VNGy3iMOSry2z  #用户用于加密签名字符串和oss用来验证签名字符串的密钥
+    accessKeyId: LTAIcibfbNkIQ1SzAZZZ   #访问身份验证中用到用户标识
+    accessKeySecret: J4R4QTKbY5V9OJD96VNGy3iMOSry2zAZZZ  #用户用于加密签名字符串和oss用来验证签名字符串的密钥
     bucketName: raven-mall-oss #oss的存储空间名称
     policy:
       expire: 300  # 签名有效期(S)

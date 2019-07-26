@@ -10,7 +10,9 @@
  */
 package com.raven.mall.tiny.dao;
 
+import com.raven.mall.tiny.mbg.model.UmsAdminRoleRelation;
 import com.raven.mall.tiny.mbg.model.UmsPermission;
+import com.raven.mall.tiny.mbg.model.UmsRole;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -24,6 +26,30 @@ import java.util.List;
  * @date 2019/5/25 18:57
  */
 public interface UmsAdminRoleRelationDao {
+
+    /**
+     * 批量插入用户角色关系
+     *
+     * @param adminRoleRelationList
+     * @return
+     */
+    int insertList(@Param("list")List<UmsAdminRoleRelation> adminRoleRelationList);
+
+    /**
+     * 获取用于所有角色
+     *
+     * @param adminId
+     * @return
+     */
+    List<UmsRole> getRoleList(@Param("adminId") Long adminId);
+
+    /**
+     * 获取用户所有角色权限
+     *
+     * @param adminId
+     * @return
+     */
+    List<UmsPermission> getRolePermissionList(@Param("adminId") Long adminId);
 
     /**
      * 获取用户所有权限(包括+-权限)

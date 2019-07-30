@@ -12,9 +12,11 @@ package com.raven.mall.tiny.service.impl;
 
 import com.github.pagehelper.PageHelper;
 import com.raven.mall.tiny.common.utils.JwtTokenUtil;
+import com.raven.mall.tiny.dao.UmsAdminPermissionRelationDao;
 import com.raven.mall.tiny.dao.UmsAdminRoleRelationDao;
 import com.raven.mall.tiny.mbg.mapper.UmsAdminLoginLogMapper;
 import com.raven.mall.tiny.mbg.mapper.UmsAdminMapper;
+import com.raven.mall.tiny.mbg.mapper.UmsAdminPermissionRelationMapper;
 import com.raven.mall.tiny.mbg.mapper.UmsAdminRoleRelationMapper;
 import com.raven.mall.tiny.mbg.model.*;
 import com.raven.mall.tiny.service.UmsAdminService;
@@ -41,12 +43,13 @@ import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
- * <<UmsAdminService实现类>>
+ * <<后台角色管理Service实现类>>
  *
  * @author Raven
- * @ Description: UmsAdminService实现类
+ * @ Description: 后台角色管理Service实现类
  * @date 2019/5/25 18:00
  */
 @Service
@@ -74,6 +77,11 @@ public class UmsAdminServiceImpl implements UmsAdminService {
 
     @Autowired
     private UmsAdminRoleRelationDao adminRoleRelationDao;
+
+    @Autowired
+    private UmsAdminPermissionRelationMapper adminPermissionRelationMapper;
+
+    private UmsAdminPermissionRelationDao adminPermissionRelationDao;
 
     @Autowired
     private UmsAdminLoginLogMapper loginLogMapper;
@@ -206,19 +214,19 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     /**
      * 根据用户名或昵称分页查询用户
      *
-     * @param name 用户名
+     * @param name     用户名
      * @param pageSize 每页数量
-     * @param pageNum 页码
+     * @param pageNum  页码
      * @return
      */
     @Override
     public List<UmsAdmin> list(String name, Integer pageSize, Integer pageNum) {
-        PageHelper.startPage(pageNum,pageSize);
+        PageHelper.startPage(pageNum, pageSize);
         UmsAdminExample example = new UmsAdminExample();
         UmsAdminExample.Criteria criteria = example.createCriteria();
-        if (!StringUtils.isEmpty(name)){
+        if (!StringUtils.isEmpty(name)) {
             criteria.andUsernameLike("%" + name + "%");
-            example.or(example.createCriteria().andNickNameLike("%"+ name + "%"));
+            example.or(example.createCriteria().andNickNameLike("%" + name + "%"));
         }
         return adminMapper.selectByExample(example);
 
@@ -227,7 +235,7 @@ public class UmsAdminServiceImpl implements UmsAdminService {
     /**
      * 修改指定用户信息
      *
-     * @param id 用户id
+     * @param id    用户id
      * @param admin 管理账户
      * @return
      */
@@ -265,9 +273,9 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         adminRoleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
         adminRoleRelationMapper.deleteByExample(adminRoleRelationExample);
         //建立新关系
-        if (!CollectionUtils.isEmpty(roleIds)){
+        if (!CollectionUtils.isEmpty(roleIds)) {
             List<UmsAdminRoleRelation> list = new ArrayList<>();
-            for (Long roleId  : roleIds) {
+            for (Long roleId : roleIds) {
                 UmsAdminRoleRelation roleRelation = new UmsAdminRoleRelation();
                 roleRelation.setAdminId(adminId);
                 roleRelation.setRoleId(roleId);
@@ -289,9 +297,52 @@ public class UmsAdminServiceImpl implements UmsAdminService {
         return adminRoleRelationDao.getRoleList(adminId);
     }
 
+    /**
+     * 修改用户的+-权限
+     *
+     * @param adminId
+     * @param permissionIds
+     * @return
+     */
     @Override
     public int updatePermission(Long adminId, List<Long> permissionIds) {
+        //删除原所有权限关系
+        UmsAdminPermissionRelationExample roleRelationExample = new UmsAdminPermissionRelationExample();
+        roleRelationExample.createCriteria().andAdminIdEqualTo(adminId);
+        adminPermissionRelationMapper.deleteByExample(roleRelationExample);
+        //获取用户所有角色权限
+        List<UmsPermission> permissionList = adminRoleRelationDao.getRolePermissionList(adminId);
+        List<Long> rolePermissionList = permissionList.stream().map(UmsPermission::getId).collect(Collectors.toList());
+        if (!CollectionUtils.isEmpty(permissionIds)) {
+            List<UmsAdminPermissionRelation> relationList = new ArrayList<>();
+            //筛选出+权限
+            List<Long> addPermissionIdList = permissionIds.stream().filter(permissionId -> !rolePermissionList.contains(permissionId)).collect(Collectors.toList());
+            //筛选出-权限
+            List<Long> subPermissionIdList = rolePermissionList.stream().filter(permissionId -> !permissionIds.contains(permissionId)).collect(Collectors.toList());
+            //
+            //  插入+-权限关系
+            relationList.addAll(convert(adminId, 1, addPermissionIdList));
+            relationList.addAll(convert(adminId, -1, subPermissionIdList));
+            return adminPermissionRelationDao.insertList(relationList);
+
+
+        }
+
         return 0;
+    }
+
+    /**
+     * 将+-权限关系转化为对象
+     */
+    private List<UmsAdminPermissionRelation> convert(Long adminId, Integer type, List<Long> permissionIdList) {
+        List<UmsAdminPermissionRelation> relationList = permissionIdList.stream().map(permissionId -> {
+            UmsAdminPermissionRelation relation = new UmsAdminPermissionRelation();
+            relation.setAdminId(adminId);
+            relation.setType(type);
+            relation.setPermissionId(permissionId);
+            return relation;
+        }).collect(Collectors.toList());
+        return relationList;
     }
 
     /**
